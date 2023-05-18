@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
@@ -14,26 +13,68 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  PlatformFile? file;
+   PlatformFile? file;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            SizedBox(height: 150,),
             TextButton(
                 onPressed: (){
                   pickFile();
                 },
-                child: Text('Press Me'),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                  child: Text(
+                      'Open PDF',
+                    style: const TextStyle(
+                        color: Colors.white
+                    ),
+                  ),
+                ),
+              style: TextButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)
+                  )
+              ),
             ),
-            SizedBox(height: 50,),
+            SizedBox(height: 30,),
+            file?.path.toString() == null || file?.path.toString() == ""
+            ? Text('')
+            : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50.0),
+              child: Text(
+                  file!.path.toString(),
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+
+                ),
+              ),
+            ),
+            SizedBox(height: 30,),
             TextButton(
               onPressed: (){
                 extractText();
               },
-              child: Text('Extract Text'),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                child: Text(
+                  'Extract Text',
+                  style: const TextStyle(
+                      color: Colors.white
+                  ),
+                ),
+              ),
+              style: TextButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)
+                  )
+              ),
             ),
           ],
         ),
@@ -42,21 +83,6 @@ class _HomeState extends State<Home> {
   }
 
   void pickFile() async {
-
-    // opens storage to pick files and the picked file or files
-    // are assigned into result and if no file is chosen result is null.
-    // you can also toggle "allowMultiple" true or false depending on your need
-    /*final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
-    // if no file is picked
-    if (result == null) return;
-
-    // we will log the name, size and path of the
-    // first picked file (if multiple are selected)
-    print(result.files.first.name);
-    print(result.files.first.size);
-    print(result.files.first.path);*/
-
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf']);
@@ -67,8 +93,10 @@ class _HomeState extends State<Home> {
       print(file!.path);
       print(file!.size);
 
-      //uploadImage(file.path!, file.extension!);
     }
+    setState(() {
+
+    });
   }
 
   Future<void> extractText() async {
@@ -95,7 +123,7 @@ class _HomeState extends State<Home> {
         context: context,
         builder: (BuildContext context){
           return AlertDialog(
-            title: Text('A'),
+            title: Text('Extracted Text'),
             content: Scrollbar(
               child: SingleChildScrollView(
                 child: Text(text),
@@ -105,9 +133,23 @@ class _HomeState extends State<Home> {
               ),
             ),
             actions: [
-              TextButton(onPressed: (){
+              TextButton(
+                  onPressed: (){
                 Navigator.of(context).pop();
-              }, child: Text('Close'))
+              },
+                  child: Text(
+                      'Close',
+                    style: const TextStyle(
+                        color: Colors.white
+                    ),
+                  ),
+                style: TextButton.styleFrom(
+                    backgroundColor: Colors.deepPurple,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)
+                    )
+                ),
+              )
             ],
           );
         });
